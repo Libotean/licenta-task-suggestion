@@ -1,0 +1,65 @@
+[
+    {
+        "name": "Scenariul 1",
+        "window": 60, "energy": 0.5, "prev_context": "Programare",
+        "tasks": [
+            {"id": "A", "duration": 40, "importance": 0.75, "urgency": 0.75, "effort": 1.0, "context": "Programare"},
+            {"id": "B", "duration": 20, "importance": 0.5,  "urgency": 0.25, "effort": 0.5, "context": "Research"},
+            {"id": "C", "duration": 15, "importance": 0.25, "urgency": 0.25, "effort": 0.0, "context": "Housework"},
+            {"id": "D", "duration": 20, "importance": 0.5,  "urgency": 0.25, "effort": 0.5, "context": "Programare"}
+        ],
+        "expected": "D",
+        "why": "D -> A (1.65) bate A -> D (1.55): taskul mediu cat ai energie, apoi cel greu"
+    },
+    {
+        "name": "energie_mica",
+        "window": 30, "energy": 0.0, "prev_context": "Programare",
+        "tasks": [
+            {"id": "X", "duration": 30, "importance": 0.75, "urgency": 0.5,  "effort": 1.0, "context": "Programare"},
+            {"id": "Y", "duration": 30, "importance": 0.5,  "urgency": 0.25, "effort": 0.0, "context": "Programare"}
+        ],
+        "expected": "Y",
+        "why": "fara energie, taskul usor bate taskul important dar greu (FR-13)"
+    },
+    {
+        "name": "nimic_nu_incape",
+        "window": 10, "energy": 0.5, "prev_context": "Programare",
+        "tasks": [
+            {"id": "P", "duration": 20, "importance": 0.75, "urgency": 0.5, "effort": 0.5, "context": "Programare"},
+            {"id": "Q", "duration": 30, "importance": 0.5,  "urgency": 0.5, "effort": 0.0, "context": "Research"}
+        ],
+        "expected": null,
+        "why": "niciun task nu incape in 10 minute, se propune pauza (FR-18)"
+    },
+    {
+        "name": "capcana_lookahead",
+        "window": 60, "energy": 1.0, "prev_context": "Programare",
+        "tasks": [
+            {"id": "L",  "duration": 45, "importance": 1.0,  "urgency": 0.5,  "effort": 0.0, "context": "Programare"},
+            {"id": "S1", "duration": 30, "importance": 0.75, "urgency": 0.5,  "effort": 0.0, "context": "Programare"},
+            {"id": "S2", "duration": 30, "importance": 0.75, "urgency": 0.25, "effort": 0.0, "context": "Research"}
+        ],
+        "expected": "S1",
+        "why": "L are scorul individual maxim dar blocheaza fereastra; S1 -> S2 valoreaza mai mult (FR-14)"
+    },
+    {
+        "name": "acelasi_context",
+        "window": 30, "energy": 1.0, "prev_context": "Programare",
+        "tasks": [
+            {"id": "P", "duration": 30, "importance": 0.5, "urgency": 0.5, "effort": 0.0, "context": "Programare"},
+            {"id": "H", "duration": 30, "importance": 0.5, "urgency": 0.5, "effort": 0.0, "context": "Housework"}
+        ],
+        "expected": "P",
+        "why": "doua taskuri egale, castiga cel fara schimbare de context (FR-15)"
+    },
+    {
+        "name": "urgenta_vs_context",
+        "window": 30, "energy": 1.0, "prev_context": "Programare",
+        "tasks": [
+            {"id": "U", "duration": 30, "importance": 0.5, "urgency": 1.0,  "effort": 0.0, "context": "Housework"},
+            {"id": "P", "duration": 30, "importance": 0.5, "urgency": 0.25, "effort": 0.0, "context": "Programare"}
+        ],
+        "expected": "U",
+        "why": "deadline iminent, ar trebui sa conteze mai mult decat schimbarea de context"
+    }
+]
