@@ -1,25 +1,24 @@
 import math
-from engine.models import Task
+from engine.loader import load_scenarios
 from engine.fitness import fitness
+from engine.config import C, PARAMS
 
-C = {
-    ('Programare', 'Research'): 0.2, ('Programare', 'Housework') : 0.8,
-    ("Research", "Programare"): 0.2, ("Research", "Housework"): 0.7,
-    ("Housework", "Programare"): 0.6, ("Housework", "Research"): 0.5,
-}
+SCENARIOS = load_scenarios()
 
-PARAMS = {'w1': 1, 'w2': 1, 'w3': 1, 'lam': 1, 'alpha': 0.2, 'default_cost': 0.5}
-
-A = Task("A", 40, 0.75, 0.75, 1.0, "Programare")
-B = Task("B", 20, 0.5, 0.25, 0.5, "Research")
-Cv = Task("C", 15, 0.25, 0.25, 0.0, "Housework")
-D = Task("D", 20, 0.5, 0.25, 0.5, "Programare")
+def fitness_for(order):
+    scenario = SCENARIOS["scenariul_1"]
+    by_id = {t.id: t for t in scenario['tasks']}
+    sequence = [by_id[i] for i in order]
+    return fitness(sequence, scenario['energy'], scenario['prev_context'], C, PARAMS)
 
 def test_a_d():
-    assert math.isclose(fitness([A, D], 0.5, "Programare", C, PARAMS), 1.55)
+    assert math.isclose(fitness_for(["A", "D"]), 1.55)
 
 def test_a_c():
-    assert math.isclose(fitness([A, Cv], 0.5, "Programare", C, PARAMS), 0.7)
+    assert math.isclose(fitness_for(["A", "C"]), 0.7)
 
 def test_d_b_c():
-    assert math.isclose(fitness([D, B, Cv], 0.5, "Programare", C, PARAMS), 1.0)
+    assert math.isclose(fitness_for(["D", "B", "C"]), 1.0)
+
+def test_d_a():
+    assert math.isclose(fitness_for(["D", "A"]), 1.65)
