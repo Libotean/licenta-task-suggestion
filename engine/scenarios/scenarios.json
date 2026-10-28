@@ -1,6 +1,6 @@
 [
     {
-        "name": "Scenariul 1",
+        "name": "scenariul_1",
         "window": 60, "energy": 0.5, "prev_context": "Programare",
         "tasks": [
             {"id": "A", "duration": 40, "importance": 0.75, "urgency": 0.75, "effort": 1.0, "context": "Programare"},
