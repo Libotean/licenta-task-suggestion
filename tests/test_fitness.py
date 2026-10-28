@@ -1,14 +1,7 @@
 import math
 from engine.models import Task
 from engine.fitness import fitness
-
-C = {
-    ('Programare', 'Research'): 0.2, ('Programare', 'Housework') : 0.8,
-    ("Research", "Programare"): 0.2, ("Research", "Housework"): 0.7,
-    ("Housework", "Programare"): 0.6, ("Housework", "Research"): 0.5,
-}
-
-PARAMS = {'w1': 1, 'w2': 1, 'w3': 1, 'lam': 1, 'alpha': 0.2, 'default_cost': 0.5}
+from engine.config import C, PARAMS
 
 A = Task("A", 40, 0.75, 0.75, 1.0, "Programare")
 B = Task("B", 20, 0.5, 0.25, 0.5, "Research")
