@@ -1,6 +1,6 @@
 from engine.loader import load_scenarios
 from engine.greedy import greedy
-from engine.config import C, PARAMS
+from engine.config import C, TEST_PARAMS as PARAMS
 
 SCENARIOS = load_scenarios()
 
