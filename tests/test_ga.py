@@ -1,7 +1,9 @@
 import math
 from engine.loader import load_scenarios
 from engine.config import C, TEST_PARAMS as PARAMS
-from engine.ga import decode, evaluate, random_search
+from engine.ga import decode, evaluate, random_search, ga
+from engine.greedy import greedy
+from engine.fitness import fitness
 
 SCENARIOS = load_scenarios()
 
@@ -41,3 +43,27 @@ def test_random_nimic_nu_incape():
 # NFR-09: acelasi seed, acelasi rezultat
 def test_random_reproductivil():
     assert run_random("scenariul_1", seed=7) == run_random("scenariul_1", seed=7)
+
+def run_ga(name, seed=42):
+    s = SCENARIOS[name]
+    seq = ga(s["tasks"], s["window"], s["energy"], s["prev_context"], C, PARAMS, seed=seed)
+    return [t.id for t in seq]
+
+def test_ga_capcana():
+    assert run_ga("capcana_lookahead") == ["S1", "S2"]
+
+def test_ga_scenariul_1():
+    assert run_ga("scenariul_1") == ["D", "A"]
+
+def test_ga_nimic_nu_incape():
+    assert run_ga("nimic_nu_incape") == []
+
+def test_ga_reproductibil():
+    assert run_ga("scenariul_1", seed=7) == run_ga("scenariul_1", seed=7)
+
+def test_ga_nu_e_mai_slab_decat_greedy():
+    for name, s in SCENARIOS.items():
+        args = (s["tasks"], s["window"], s["energy"], s["prev_context"], C, PARAMS)
+        f_ga = fitness(ga(*args), s["energy"], s["prev_context"], C, PARAMS)
+        f_greedy = fitness(greedy(*args), s["energy"], s["prev_context"], C, PARAMS)
+        assert f_ga >= f_greedy - 1e-9

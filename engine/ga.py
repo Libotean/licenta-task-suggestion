@@ -1,5 +1,6 @@
 import random
 from engine.fitness import fitness
+from engine.greedy import greedy
 
 def decode(perm, window):
     sequence = []
@@ -63,3 +64,39 @@ def swap_mutation(perm, p_m, rng):
         i, j = rng.sample(range(len(perm)), 2)
         perm[i], perm[j] = perm[j], perm[i]
     return perm
+
+def ga(tasks, window, energy, prev_context, C, params, pop_size=50, generations=100, p_c=0.9, p_m=0.2, k=3, seed=42):
+    rng = random.Random(seed)
+    n = len(tasks)
+    if n ==0:
+        return []
+
+    def score(perm):
+        return evaluate([tasks[i] for i in perm], window, energy, prev_context, C, params)
+
+    g_idx = [tasks.index(t) for t in greedy(tasks, window, energy, prev_context, C, params)]
+    population = [g_idx + [i for i in range(n) if i not in g_idx]]
+    while len(population) < pop_size:
+        perm = list(range(n))
+        rng.shuffle(perm)
+        population.append(perm)
+
+    for _ in range(generations):
+        values = [score(p)[0] for p in population]
+        best_i = max(range(pop_size), key=lambda i: values[i])
+        new_population = [population[best_i]]
+
+        while len(new_population) < pop_size:
+            parent1 = tournament(population, values, k, rng)
+            parent2 = tournament(population, values, k, rng)
+            if rng.random() < p_c:
+                child = order_crossover(parent1, parent2, rng)
+            else:
+                child = list(parent1)
+            new_population.append(swap_mutation(child, p_m, rng))
+
+        population = new_population
+
+    results = [score(p) for p in population]
+    best_i = max(range(pop_size), key=lambda i: results[i][0])
+    return results[best_i][1]
