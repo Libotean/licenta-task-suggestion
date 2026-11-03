@@ -1,5 +1,5 @@
 from engine.loader import load_scenarios
-from engine.config import C, PARAMS
+from engine.config import C, TEST_PARAMS as PARAMS 
 from engine.brute_force import brute_force
 
 SCENARIOS = load_scenarios()

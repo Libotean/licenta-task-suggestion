@@ -1,7 +1,7 @@
 import math
 from engine.loader import load_scenarios
 from engine.fitness import fitness
-from engine.config import C, PARAMS
+from engine.config import C, TEST_PARAMS as PARAMS
 
 SCENARIOS = load_scenarios()
 

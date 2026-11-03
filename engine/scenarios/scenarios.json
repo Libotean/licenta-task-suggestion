@@ -61,5 +61,16 @@
         ],
         "expected": "U",
         "why": "deadline iminent, ar trebui sa conteze mai mult decat schimbarea de context"
+    },
+    {
+        "name": "recreere_vs_tema",
+        "window": 60, "energy": 0.5, "prev_context": "Recreere",
+        "tasks": [
+            {"id": "T",  "duration": 60, "importance": 0.5,  "urgency": 1.0, "effort": 0.5, "context": "Facultate"},
+            {"id": "R",  "duration": 30, "importance": 0.75, "urgency": 0.0, "effort": 0.0, "context": "Recreere"},
+            {"id": "R2", "duration": 30, "importance": 0.25, "urgency": 0.0, "effort": 0.0, "context": "Recreere"}
+        ],
+        "expected": "T",
+        "why": "tema are deadline iminent, deci trebuie lasata activitatea recreativa chiar daca schimba contextul"
     }
 ]
