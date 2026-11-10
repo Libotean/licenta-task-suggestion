@@ -65,7 +65,7 @@ def swap_mutation(perm, p_m, rng):
         perm[i], perm[j] = perm[j], perm[i]
     return perm
 
-def ga(tasks, window, energy, prev_context, C, params, pop_size=50, generations=100, p_c=0.9, p_m=0.2, k=3, seed=42):
+def ga(tasks, window, energy, prev_context, C, params, pop_size=50, generations=300, p_c=0.9, p_m=0.2, k=3, seed=42, history=None):
     rng = random.Random(seed)
     n = len(tasks)
     if n ==0:
@@ -84,6 +84,8 @@ def ga(tasks, window, energy, prev_context, C, params, pop_size=50, generations=
     for _ in range(generations):
         values = [score(p)[0] for p in population]
         best_i = max(range(pop_size), key=lambda i: values[i])
+        if history is not None:
+                history.append(values[best_i])
         new_population = [population[best_i]]
 
         while len(new_population) < pop_size:

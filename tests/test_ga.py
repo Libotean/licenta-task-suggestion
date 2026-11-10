@@ -67,3 +67,11 @@ def test_ga_nu_e_mai_slab_decat_greedy():
         f_ga = fitness(ga(*args), s["energy"], s["prev_context"], C, PARAMS)
         f_greedy = fitness(greedy(*args), s["energy"], s["prev_context"], C, PARAMS)
         assert f_ga >= f_greedy - 1e-9
+
+def test_ga_istoric():
+    s = SCENARIOS["scenariul_1"]
+    history = []
+    ga(s["tasks"], s["window"], s["energy"], s["prev_context"], C, PARAMS,
+       generations=30, history=history)
+    assert len(history) == 30
+    assert all(a <= b for a, b in zip(history, history[1:]))
